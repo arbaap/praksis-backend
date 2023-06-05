@@ -6,12 +6,16 @@ const fs = require("fs");
 const router = express.Router();
 const upload = multer({ dest: "uploads_convert_image/" });
 
-
-router.get("/image", async (req, res, next) => {
-  return res.status(200).json({
-    title: "Express Testing Image",
-    message: "The app is working properly!",
-  });
+router.get("/", async (req, res) => {
+  try {
+    res.json({
+      status: 200,
+      message: "succes",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).Send("selve errordd");
+  }
 });
 
 router.use("/uploads_convert_image", express.static("uploads_convert_image"));

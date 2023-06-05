@@ -6,11 +6,17 @@ const fs = require("fs");
 const router = express();
 const upload = multer({ dest: "uploads_merge_audio/" });
 
-router.get("/maudio", async (req, res, next) => {
-  return res.status(200).json({
-    title: "Express Testing Merge",
-    message: "The app is working properly!",
-  });
+
+router.get("/", async (req, res) => {
+  try {
+    res.json({
+      status: 200,
+      message: "succes",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).Send("selve errorss");
+  }
 });
 
 router.post("/merge", upload.array("audioFiles"), (req, res) => {
