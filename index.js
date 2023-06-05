@@ -8,7 +8,7 @@ const mergeAudio = require("./mergeaudio");
 app.use(express.json());
 app.use(cors());
 
-app.use("/", convertAudio);
+app.use("/audio", convertAudio);
 app.use("/", convertImage);
 app.use("/", mergeAudio);
 
