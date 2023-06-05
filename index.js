@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const convertaudio = require("./api/convertaudio.js");
-const convertimage = require("./api/convertimage.js");
-const mergeaudio = require("./api/mergeaudio.js");
+// const convertaudio = require("./api/convertaudio.js");
+// const convertimage = require("./api/convertimage.js");
+// const mergeaudio = require("./api/mergeaudio.js");
 
 app.use(express.json());
 app.use(cors());
