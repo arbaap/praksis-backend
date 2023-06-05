@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).Send("selve error");
+    return res.status(500).send("selve error");
   }
 });
 
