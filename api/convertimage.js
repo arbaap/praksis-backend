@@ -5,7 +5,7 @@ const fs = require("fs");
 
 const router = express.Router();
 
-// const upload = multer({ dest: "uploads_convert_image/" });
+const upload = multer({ dest: "uploads_convert_image/" });
 
 router.get("/", async (req, res) => {
   try {

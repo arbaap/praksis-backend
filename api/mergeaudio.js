@@ -5,7 +5,7 @@ const fs = require("fs");
 
 const router = express.Router();
 
-// const upload = multer({ dest: "uploads_merge_audio/" });
+const upload = multer({ dest: "uploads_merge_audio/" });
 
 router.get("/", async (req, res) => {
   try {
