@@ -10,14 +10,13 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     res.json({
-      status:200,
-      message:"succes"
-    })
+      status: 200,
+      message: "succes",
+    });
   } catch (error) {
-    console.error(error)
-    return res.status(500).Send("selve error")
+    console.error(error);
+    return res.status(500).Send("selve error");
   }
-  
 });
 
 router.use("/uploads_convert_audio", express.static("uploads_convert_audio"));
