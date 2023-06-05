@@ -15,9 +15,9 @@ app.get("/", async (req, res, next) => {
   });
 });
 
-app.use("/api/convertaudio", convertaudio);
-app.use("/api/convertimage", convertimage);
-app.use("/api/mergeaudio", mergeaudio);
+app.use("/convertaudio", convertaudio);
+app.use("/convertimage", convertimage);
+app.use("/mergeaudio", mergeaudio);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log("Server is running on port", port));
