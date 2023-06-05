@@ -7,6 +7,13 @@ const fs = require("fs");
 
 const router = express.Router();
 
+router.get("/home", async (req, res, next) => {
+  return res.status(200).json({
+    title: "Express Testing",
+    message: "The app is working properly!",
+  });
+});
+
 router.use("/uploads_convert_audio", express.static("uploads_convert_audio"));
 
 const storage = multer.diskStorage({
@@ -24,7 +31,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ dest: "uploads_convert_audio/" });
 
-
 router.post("/upload", upload.single("audio"), (req, res) => {
   if (req.file) {
     const { originalname, mimetype, size } = req.file;
@@ -39,7 +45,6 @@ router.post("/upload", upload.single("audio"), (req, res) => {
     res.status(400).json({ message: "No file uploaded" });
   }
 });
-
 
 router.post("/convert", upload.single("audio"), (req, res) => {
   if (req.file) {
@@ -73,7 +78,6 @@ router.post("/convert", upload.single("audio"), (req, res) => {
     res.status(400).json({ message: "No file uploaded" });
   }
 });
-
 
 router.get("/download/:filename", (req, res) => {
   const { filename } = req.params;
