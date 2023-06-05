@@ -12,7 +12,14 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads_convert_image/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
 
 const upload = multer({ storage });
 

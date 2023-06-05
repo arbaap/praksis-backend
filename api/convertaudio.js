@@ -16,18 +16,7 @@ router.get("/", async (req, res, next) => {
 
 router.use("/uploads_convert_audio", express.static("uploads_convert_audio"));
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads_convert_audio/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
-  },
-});
+const storage = multer.memoryStorage(); // Menggunakan memory storage
 
 const upload = multer({ storage });
 
@@ -36,7 +25,6 @@ router.post("/upload", upload.single("audio"), (req, res) => {
     const { originalname, mimetype, size } = req.file;
     res.json({
       message: "File uploaded successfully",
-      filename: req.file.filename,
       originalname,
       mimetype,
       size,
@@ -49,33 +37,28 @@ router.post("/upload", upload.single("audio"), (req, res) => {
 router.post("/convert", upload.single("audio"), (req, res) => {
   if (req.file) {
     const { format } = req.body;
-    const filePath = req.file.path;
-    const convertedFileName = uuidv4() + "." + format;
-    const convertedFilePath = path.join(
-      "uploads_convert_audio",
-      convertedFileName
-    );
+    const audioBuffer = req.file.buffer; // Mengambil Buffer dari file audio
 
-    ffmpeg(filePath)
+    ffmpeg(audioBuffer) // Menggunakan Buffer sebagai input ffmpeg
       .toFormat(format)
-      .save(convertedFilePath)
-      .on("end", () => {
-        const convertedFileSize = fs.statSync(convertedFilePath).size;
+      .toBuffer((err, convertedBuffer) => {
+        if (err) {
+          console.error("Error converting file:", err);
+          res.status(500).json({ message: "Error converting file" });
+        } else {
+          const convertedFileSize = convertedBuffer.length;
 
-        const convertedFileDetails = {
-          name: convertedFileName,
-          type: format,
-          size: convertedFileSize,
-        };
+          const convertedFileDetails = {
+            name: uuidv4() + "." + format,
+            type: format,
+            size: convertedFileSize,
+          };
 
-        res.json({
-          message: "File converted successfully",
-          convertedFileDetails,
-        });
-      })
-      .on("error", (err) => {
-        console.error("Error converting file:", err);
-        res.status(500).json({ message: "Error converting file" });
+          res.json({
+            message: "File converted successfully",
+            convertedFileDetails,
+          });
+        }
       });
   } else {
     res.status(400).json({ message: "No file uploaded" });
