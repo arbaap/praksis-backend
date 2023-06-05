@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const convertAudio = require("./convertaudio");
-const convertImage = require("./api/convertimage");
-const mergeAudio = require("./mergeaudio");
+const convertaudio = require("./api/convertaudio");
+const convertimage = require("./api/convertimage");
+const mergeaudio = require("./api/mergeaudio");
 
 app.use(express.json());
 app.use(cors());
@@ -15,9 +15,9 @@ app.get("/", async (req, res, next) => {
   });
 });
 
-app.use("/", convertAudio);
-app.use("/", convertImage);
-app.use("/", mergeAudio);
+app.use("/api/convertaudio", convertaudio);
+app.use("/api/convertimage", convertimage);
+app.use("/api/mergeaudio", mergeaudio);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log("Server is running on port", port));
