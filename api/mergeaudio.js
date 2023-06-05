@@ -7,98 +7,99 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   return res.status(200).json({
-    title: "Express Testing Merge",
+    title: "Express Testing",
     message: "The app is working properly!",
   });
 });
 
-// const upload = multer({ dest: "uploads_merge_audio/" });
-// router.post("/merge", upload.array("audioFiles"), (req, res) => {
-//   const audioFiles = req.files;
-//   console.log("Uploading files:", audioFiles);
+const upload = multer({ dest: "uploads_merge_audio/" });
 
-//   const outputPath = "merged.mp3";
-//   const command = ffmpeg();
+router.post("/merge", upload.array("audioFiles"), (req, res) => {
+  const audioFiles = req.files;
+  console.log("Uploading files:", audioFiles);
 
-//   audioFiles.forEach((file) => {
-//     command.input(file.path);
-//   });
+  const outputPath = "merged.mp3";
+  const command = ffmpeg();
 
-//   command
-//     .on("end", () => {
-//       console.log("Audio merged successfully");
-//       res.download(outputPath, "merged-audio.mp3", (err) => {
-//         if (err) {
-//           console.error("Error downloading merged audio:", err);
-//         }
+  audioFiles.forEach((file) => {
+    command.input(file.path);
+  });
 
-//         audioFiles.forEach((file) => {
-//           fs.unlink(file.path, (err) => {
-//             if (err) {
-//               console.error("Error deleting temporary file:", err);
-//             }
-//           });
-//         });
+  command
+    .on("end", () => {
+      console.log("Audio merged successfully");
+      res.download(outputPath, "merged-audio.mp3", (err) => {
+        if (err) {
+          console.error("Error downloading merged audio:", err);
+        }
 
-//         fs.unlink(outputPath, (err) => {
-//           if (err) {
-//             console.error("Error deleting merged audio file:", err);
-//           }
-//         });
-//       });
-//     })
-//     .on("error", (error) => {
-//       console.error("Error merging audio:", error);
-//       return res.status(500).send("Error merging audio");
-//     })
-//     .mergeToFile(outputPath);
-// });
+        audioFiles.forEach((file) => {
+          fs.unlink(file.path, (err) => {
+            if (err) {
+              console.error("Error deleting temporary file:", err);
+            }
+          });
+        });
 
-// router.post("/mergewithbacksound", upload.array("audioFiles"), (req, res) => {
-//   const audioFiles = req.files;
-//   console.log("Uploading files:", audioFiles);
+        fs.unlink(outputPath, (err) => {
+          if (err) {
+            console.error("Error deleting merged audio file:", err);
+          }
+        });
+      });
+    })
+    .on("error", (error) => {
+      console.error("Error merging audio:", error);
+      return res.status(500).send("Error merging audio");
+    })
+    .mergeToFile(outputPath);
+});
 
-//   const outputPath = "merged-with-backsound.mp3";
-//   const command = ffmpeg();
+router.post("/mergewithbacksound", upload.array("audioFiles"), (req, res) => {
+  const audioFiles = req.files;
+  console.log("Uploading files:", audioFiles);
 
-//   command
-//     .input(audioFiles[0].path)
-//     .input(audioFiles[1].path)
-//     .complexFilter([
-//       "[0:a]volume=1[a1];[1:a]volume=0.5[a2];[a1][a2]amix=inputs=2:duration=longest",
-//     ]);
+  const outputPath = "merged-with-backsound.mp3";
+  const command = ffmpeg();
 
-//   command
-//     .on("end", () => {
-//       console.log("Audio merged with backsound successfully");
-//       res.download(outputPath, "merged-audio-with-backsound.mp3", (err) => {
-//         if (err) {
-//           console.error("Error downloading merged audio with backsound:", err);
-//         }
+  command
+    .input(audioFiles[0].path)
+    .input(audioFiles[1].path)
+    .complexFilter([
+      "[0:a]volume=1[a1];[1:a]volume=0.5[a2];[a1][a2]amix=inputs=2:duration=longest",
+    ]);
 
-//         audioFiles.forEach((file) => {
-//           fs.unlink(file.path, (err) => {
-//             if (err) {
-//               console.error("Error deleting temporary file:", err);
-//             }
-//           });
-//         });
+  command
+    .on("end", () => {
+      console.log("Audio merged with backsound successfully");
+      res.download(outputPath, "merged-audio-with-backsound.mp3", (err) => {
+        if (err) {
+          console.error("Error downloading merged audio with backsound:", err);
+        }
 
-//         fs.unlink(outputPath, (err) => {
-//           if (err) {
-//             console.error(
-//               "Error deleting merged audio with backsound file:",
-//               err
-//             );
-//           }
-//         });
-//       });
-//     })
-//     .on("error", (error) => {
-//       console.error("Error merging audio with backsound:", error);
-//       return res.status(500).send("Error merging audio with backsound");
-//     })
-//     .save(outputPath);
-// });
+        audioFiles.forEach((file) => {
+          fs.unlink(file.path, (err) => {
+            if (err) {
+              console.error("Error deleting temporary file:", err);
+            }
+          });
+        });
+
+        fs.unlink(outputPath, (err) => {
+          if (err) {
+            console.error(
+              "Error deleting merged audio with backsound file:",
+              err
+            );
+          }
+        });
+      });
+    })
+    .on("error", (error) => {
+      console.error("Error merging audio with backsound:", error);
+      return res.status(500).send("Error merging audio with backsound");
+    })
+    .save(outputPath);
+});
 
 module.exports = router;
