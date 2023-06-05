@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const ffmpeg = require("fluent-ffmpeg");
 const fs = require("fs");
+const path = require("path");
 
 const router = express.Router();
 
@@ -12,7 +13,16 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-const upload = multer({ dest: "uploads_merge_audio/" });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads_merge_audio/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 router.post("/merge", upload.array("audioFiles"), (req, res) => {
   const audioFiles = req.files;
