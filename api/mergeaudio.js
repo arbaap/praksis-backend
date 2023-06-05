@@ -3,9 +3,9 @@ const multer = require("multer");
 const ffmpeg = require("fluent-ffmpeg");
 const fs = require("fs");
 
-const router = express();
-const upload = multer({ dest: "uploads_merge_audio/" });
+const router = express.Router();
 
+// const upload = multer({ dest: "uploads_merge_audio/" });
 
 router.get("/", async (req, res) => {
   try {
@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).Send("selve errorss");
+    return res.status(500).send("selve errorss");
   }
 });
 

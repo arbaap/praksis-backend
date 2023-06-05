@@ -4,7 +4,8 @@ const sharp = require("sharp");
 const fs = require("fs");
 
 const router = express.Router();
-const upload = multer({ dest: "uploads_convert_image/" });
+
+// const upload = multer({ dest: "uploads_convert_image/" });
 
 router.get("/", async (req, res) => {
   try {
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).Send("selve errordd");
+    return res.status(500).send("selve errordd");
   }
 });
 
