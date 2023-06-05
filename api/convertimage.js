@@ -25,7 +25,7 @@ const upload = multer({ storage });
 
 router.use("/uploads_convert_image", express.static("uploads_convert_image"));
 
-router.post("/api/upload", upload.single("image"), (req, res) => {
+router.post("/upload", upload.single("image"), (req, res) => {
   const imagePath = req.file.path;
   const processedImagePath = `processed_${req.file.originalname}`;
   const fileExtension = req.file.originalname.split(".").pop().toLowerCase();
@@ -68,7 +68,7 @@ router.post("/api/upload", upload.single("image"), (req, res) => {
     });
 });
 
-router.get("/api/download/:imageName", (req, res) => {
+router.get("/download/:imageName", (req, res) => {
   const imageName = req.params.imageName;
   const imagePath = `uploads_convert_image/${imageName}`;
 
