@@ -3,9 +3,15 @@ const multer = require("multer");
 const ffmpeg = require("fluent-ffmpeg");
 const fs = require("fs");
 
-
 const router = express();
 const upload = multer({ dest: "uploads_merge_audio/" });
+
+router.get("/", async (req, res, next) => {
+  return res.status(200).json({
+    title: "Express Testing Merge",
+    message: "The app is working properly!",
+  });
+});
 
 router.post("/merge", upload.array("audioFiles"), (req, res) => {
   const audioFiles = req.files;
