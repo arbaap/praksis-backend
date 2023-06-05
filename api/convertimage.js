@@ -12,7 +12,16 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-const upload = multer({ dest: "uploads_convert_image/" });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads_convert_image/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 router.use("/uploads_convert_image", express.static("uploads_convert_image"));
 
